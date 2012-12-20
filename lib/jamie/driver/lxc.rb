@@ -1,4 +1,5 @@
 require "securerandom"
+require "benchmark"
 require "mixlib/shellout"
 
 module Jamie
@@ -16,15 +17,28 @@ module Jamie
           "dhcp_lease_file" => "/var/lib/misc/dnsmasq.leases"
         }
       end
+
+      def wait_for_sshd(hostname)
+        3.times do
+          print "."
+          sleep 1
+        end
+        puts ""
+      end
+
     end
 
     class LXC < Jamie::Driver::SSHBase
 
       def perform_create(instance, state)
         state["name"] = instance.name + "-" + ::SecureRandom.hex(3)
-        clone_container(instance, state)
-        start_container(instance, state)
-        state["hostname"] = container_ip(instance, state)
+        elapsed_time = ::Benchmark.measure do
+          clone_container(instance, state)
+          start_container(instance, state)
+          state["hostname"] = container_ip(instance, state)
+          wait_for_sshd(state["hostname"])
+        end
+        puts "       Created #{state["name"]} in #{elapsed_time.real} seconds."
       end
 
       def perform_destroy(instance, state)
