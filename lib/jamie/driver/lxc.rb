@@ -12,6 +12,7 @@ module Jamie
     class SSHBase
       def config
         {
+          "use_sudo" => true,
           "dhcp_lease_file" => "/var/lib/misc/dnsmasq.leases"
         }
       end
@@ -26,11 +27,18 @@ module Jamie
         state["hostname"] = container_ip(instance, state)
       end
 
+      def perform_destroy(instance, state)
+        destroy_container(instance, state)
+      end
+
       protected
 
       def run_command(command)
-        puts "       [lxc command] 'sudo #{command}'"
-        shell = Mixlib::ShellOut.new("sudo " + command, :live_stream => STDOUT, :timeout => 60000)
+        if config["use_sudo"]
+          command = "sudo " + command
+        end
+        puts "       [lxc command] '#{command}'"
+        shell = Mixlib::ShellOut.new(command, :live_stream => STDOUT, :timeout => 60000)
         shell.run_command
         puts "       [lxc command] ran in #{shell.execution_time} seconds."
         shell.error!
@@ -45,6 +53,10 @@ module Jamie
       def start_container(instance, state)
         run_command("lxc-start -n #{state["name"]} -d")
         run_command("lxc-wait -n #{state["name"]} -s RUNNING")
+      end
+
+      def destroy_container(instance, state)
+        run_command("lxc-destroy -n #{state["name"]} -f")
       end
 
       def container_ip(instance, state)

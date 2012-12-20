@@ -17,6 +17,7 @@ describe Jamie::Driver::LXC do
     puts state.inspect
     state.must_include("name")
     state.must_include("hostname")
+    @lxc.perform_destroy(@instance, state)
   end
 
 end
