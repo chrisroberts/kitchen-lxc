@@ -10,6 +10,7 @@ Gem::Specification.new do |gem|
   gem.has_rdoc      = false
 
   gem.add_development_dependency("rake")
+  gem.add_development_dependency("mixlib-shellout")
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
