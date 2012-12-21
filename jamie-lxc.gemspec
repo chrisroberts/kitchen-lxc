@@ -9,8 +9,9 @@ Gem::Specification.new do |gem|
   gem.license       = "MIT"
   gem.has_rdoc      = false
 
+  gem.add_dependency("jamie")
+
   gem.add_development_dependency("rake")
-  gem.add_development_dependency("mixlib-shellout")
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

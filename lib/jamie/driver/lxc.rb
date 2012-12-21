@@ -1,84 +1,53 @@
 require "securerandom"
 require "benchmark"
-require "mixlib/shellout"
+require "jamie"
 
 module Jamie
 
-  class Instance
-    attr_accessor :name
-  end
-
   module Driver
-
-    class SSHBase
-      def config
-        {
-          "use_sudo" => true,
-          "dhcp_lease_file" => "/var/lib/misc/dnsmasq.leases"
-        }
-      end
-
-      def wait_for_sshd(hostname)
-        3.times do
-          print "."
-          sleep 1
-        end
-        puts ""
-      end
-
-    end
 
     class LXC < Jamie::Driver::SSHBase
 
+      default_config "use_sudo",        true
+      default_config "dhcp_lease_file", "/var/lib/misc/dnsmasq.leases"
+      default_config "port",            "22"
+
       def perform_create(instance, state)
-        state["name"] = instance.name + "-" + ::SecureRandom.hex(3)
+        state["container_id"] = instance.name + "-" + ::SecureRandom.hex(3)
         elapsed_time = ::Benchmark.measure do
-          clone_container(instance, state)
-          start_container(instance, state)
-          state["hostname"] = container_ip(instance, state)
+          clone_container(state)
+          start_container(state)
+          state["hostname"] = container_ip(state)
           wait_for_sshd(state["hostname"])
         end
-        puts "       Created #{state["name"]} in #{elapsed_time.real} seconds."
+        puts "       Created #{state["container_id"]} in #{elapsed_time.real} seconds."
       end
 
       def perform_destroy(instance, state)
-        destroy_container(instance, state)
+        destroy_container(state)
       end
 
       protected
 
-      def run_command(command)
-        if config["use_sudo"]
-          command = "sudo " + command
-        end
-        puts "       [lxc command] '#{command}'"
-        shell = Mixlib::ShellOut.new(command, :live_stream => STDOUT, :timeout => 60000)
-        shell.run_command
-        puts "       [lxc command] ran in #{shell.execution_time} seconds."
-        shell.error!
-      rescue Mixlib::ShellOut::ShellCommandFailed => error
-        raise ActionFailed, error.message
+      def clone_container(state)
+        run_command("lxc-clone -o #{config["base_container"]} -n #{state["container_id"]}")
       end
 
-      def clone_container(instance, state)
-        run_command("lxc-clone -o #{instance.name} -n #{state["name"]}")
+      def start_container(state)
+        run_command("lxc-start -n #{state["container_id"]} -d")
+        run_command("lxc-wait -n #{state["container_id"]} -s RUNNING")
       end
 
-      def start_container(instance, state)
-        run_command("lxc-start -n #{state["name"]} -d")
-        run_command("lxc-wait -n #{state["name"]} -s RUNNING")
+      def destroy_container(state)
+        run_command("lxc-destroy -n #{state["container_id"]} -f")
       end
 
-      def destroy_container(instance, state)
-        run_command("lxc-destroy -n #{state["name"]} -f")
-      end
-
-      def container_ip(instance, state)
+      def container_ip(state)
         if File.exists?(config["dhcp_lease_file"])
           3.times do
             leases = File.readlines(config["dhcp_lease_file"]).map{ |line| line.split(" ") }
             leases.each do |lease|
-              if lease.include?(state["name"])
+              if lease.include?(state["container_id"])
                 return lease[2]
               end
             end
@@ -87,7 +56,7 @@ module Jamie
         else
           raise ActionFailed, "LXC DHCP lease file does not exist '#{config["dhcp_lease_file"]}'"
         end
-        raise ActionFailed, "Could not determine IP address for LXC container '#{state["name"]}'"
+        raise ActionFailed, "Could not determine IP address for LXC container '#{state["container_id"]}'"
       end
 
     end

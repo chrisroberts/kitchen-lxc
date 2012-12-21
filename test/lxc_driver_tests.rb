@@ -6,18 +6,19 @@ require File.join(File.dirname(__FILE__), "..", "lib", "jamie", "driver", "lxc")
 describe Jamie::Driver::LXC do
 
   before do
-    @lxc = Jamie::Driver::LXC.new
-    @instance = Jamie::Instance.new
-    @instance.name = "iac-testing"
+    suite = Jamie::Suite.new("name" => "test", "run_list" => Array.new)
+    config = {
+      "jamie_root" => File.dirname(__FILE__),
+      "base_container" => "iac-testing"
+    }
+    driver = Jamie::Driver::LXC.new(config)
+    platform = Jamie::Platform.new("name" => "ubuntu-12.04", "driver" => driver)
+    @instance = Jamie::Instance.new(suite, platform)
   end
 
   it "can clone a base lxc container" do
-    state = Hash.new
-    @lxc.perform_create(@instance, state)
-    puts state.inspect
-    state.must_include("name")
-    state.must_include("hostname")
-    @lxc.perform_destroy(@instance, state)
+    @instance.create
+    @instance.destroy
   end
 
 end
