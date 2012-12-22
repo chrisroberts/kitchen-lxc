@@ -3,7 +3,7 @@ require "minitest/autorun"
 
 require File.join(File.dirname(__FILE__), "..", "lib", "jamie", "driver", "lxc")
 
-describe Jamie::Driver::LXC do
+describe Jamie::Driver::Lxc do
 
   before do
     suite = Jamie::Suite.new("name" => "test", "run_list" => Array.new)

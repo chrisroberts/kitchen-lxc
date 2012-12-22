@@ -6,7 +6,7 @@ module Jamie
 
   module Driver
 
-    class LXC < Jamie::Driver::SSHBase
+    class Lxc < Jamie::Driver::SSHBase
 
       default_config "use_sudo",        true
       default_config "dhcp_lease_file", "/var/lib/misc/dnsmasq.leases"
@@ -44,7 +44,7 @@ module Jamie
 
       def container_ip(state)
         if ::File.exists?(config["dhcp_lease_file"])
-          3.times do
+          10.times do
             leases = ::File.readlines(config["dhcp_lease_file"]).map{ |line| line.split(" ") }
             leases.each do |lease|
               if lease.include?(state["container_id"])
