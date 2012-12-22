@@ -44,7 +44,7 @@ module Jamie
 
       def container_ip(state)
         if ::File.exists?(config["dhcp_lease_file"])
-          10.times do
+          20.times do
             leases = ::File.readlines(config["dhcp_lease_file"]).map{ |line| line.split(" ") }
             leases.each do |lease|
               if lease.include?(state["container_id"])
