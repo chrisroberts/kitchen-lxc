@@ -24,7 +24,9 @@ module Jamie
       end
 
       def perform_destroy(instance, state)
-        destroy_container(state)
+        if state["container_id"]
+          destroy_container(state)
+        end
       end
 
       protected
