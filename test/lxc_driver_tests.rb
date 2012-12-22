@@ -9,10 +9,10 @@ describe Jamie::Driver::Lxc do
     suite = Jamie::Suite.new("name" => "test", "run_list" => Array.new)
     config = {
       "jamie_root" => File.dirname(__FILE__),
-      "base_container" => "iac-testing"
+      "base_container" => "ubuntu-1204"
     }
-    driver = Jamie::Driver::LXC.new(config)
-    platform = Jamie::Platform.new("name" => "ubuntu-12.04", "driver" => driver)
+    driver = Jamie::Driver::Lxc.new(config)
+    platform = Jamie::Platform.new("name" => "ubuntu-1204", "driver" => driver)
     @instance = Jamie::Instance.new(suite, platform)
   end
 
