@@ -11,6 +11,8 @@ module Jamie
       default_config "use_sudo",        true
       default_config "dhcp_lease_file", "/var/lib/misc/dnsmasq.leases"
       default_config "port",            "22"
+      default_config "username",        "jamie"
+      default_config "password",        "jamie"
 
       def perform_create(instance, state)
         state["container_id"] = instance.name + "-" + ::SecureRandom.hex(3)
@@ -46,7 +48,7 @@ module Jamie
 
       def container_ip(state)
         if ::File.exists?(config["dhcp_lease_file"])
-          20.times do
+          30.times do
             leases = ::File.readlines(config["dhcp_lease_file"]).map{ |line| line.split(" ") }
             leases.each do |lease|
               if lease.include?(state["container_id"])
