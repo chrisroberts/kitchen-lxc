@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name          = "jamie-lxc"
-  gem.version       = "0.0.1.alpha3"
+  gem.version       = "0.0.1.alpha4"
   gem.authors       = ["Sean Porter"]
   gem.email         = ["portertech@gmail.com"]
   gem.description   = "LXC driver for Jamie"
