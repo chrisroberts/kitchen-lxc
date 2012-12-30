@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name          = "jamie-lxc"
-  gem.version       = "0.0.1.alpha4"
+  gem.version       = "0.0.1.alpha5"
   gem.authors       = ["Sean Porter"]
   gem.email         = ["portertech@gmail.com"]
   gem.description   = "LXC driver for Jamie"
@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.license       = "MIT"
   gem.has_rdoc      = false
 
-  gem.add_dependency("jamie")
+  gem.add_dependency("jamie", ">= 0.1.0.alpha18")
 
   gem.add_development_dependency("rake")
 
