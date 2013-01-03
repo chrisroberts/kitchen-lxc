@@ -1,5 +1,6 @@
 require "minitest/spec"
 require "minitest/autorun"
+require "stringio"
 
 require File.join(File.dirname(__FILE__), "..", "lib", "jamie", "driver", "lxc")
 
@@ -12,8 +13,17 @@ describe Jamie::Driver::Lxc do
       "base_container" => "ubuntu-1204"
     }
     driver = Jamie::Driver::Lxc.new(config)
-    platform = Jamie::Platform.new("name" => "ubuntu-1204", "driver" => driver)
-    @instance = Jamie::Instance.new(suite, platform)
+    platform = Jamie::Platform.new("name" => "ubuntu-1204")
+    @logger_output = StringIO.new
+    logger = Jamie::Logger.new(:stdout => @logger_output)
+    options = {
+      "suite" => suite,
+      "platform" => platform,
+      "driver" => driver,
+      "jr" => "jr",
+      "logger" => logger
+    }
+    @instance = Jamie::Instance.new(options)
   end
 
   it "can clone a base lxc container" do
