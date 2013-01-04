@@ -14,7 +14,7 @@ module Jamie
       default_config "username",        "jamie"
       default_config "password",        "jamie"
 
-      def create(instance, state)
+      def create(state)
         state["container_id"] = instance.name + "-" + ::SecureRandom.hex(3)
         elapsed_time = ::Benchmark.measure do
           clone_container(state)
@@ -25,7 +25,7 @@ module Jamie
         puts "       Created #{state["container_id"]} in #{elapsed_time.real} seconds."
       end
 
-      def destroy(instance, state)
+      def destroy(state)
         if state["container_id"]
           destroy_container(state)
         end
