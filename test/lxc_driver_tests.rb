@@ -7,28 +7,26 @@ require File.join(File.dirname(__FILE__), "..", "lib", "jamie", "driver", "lxc")
 describe Jamie::Driver::Lxc do
 
   before do
-    suite = Jamie::Suite.new("name" => "test", "run_list" => Array.new)
-    config = {
-      "jamie_root" => File.dirname(__FILE__),
+    @logger_output = StringIO.new
+    driver_options = {
+      "jamie_root"     => File.dirname(__FILE__),
       "base_container" => "ubuntu-1204"
     }
-    driver = Jamie::Driver::Lxc.new(config)
-    platform = Jamie::Platform.new("name" => "ubuntu-1204")
-    @logger_output = StringIO.new
-    logger = Jamie::Logger.new(:stdout => @logger_output)
-    options = {
-      "suite" => suite,
-      "platform" => platform,
-      "driver" => driver,
-      "jr" => "jr",
-      "logger" => logger
+    instance_options = {
+      "logger"   => Jamie::Logger.new(:stdout => @logger_output),
+      "suite"    => Jamie::Suite.new("name" => "test", "run_list" => Array.new),
+      "platform" => Jamie::Platform.new("name" => "ubuntu-1204"),
+      "driver"   => Jamie::Driver::Lxc.new(driver_options),
+      "jr"       => Jamie::Jr.new("test")
     }
-    @instance = Jamie::Instance.new(options)
+    @instance = Jamie::Instance.new(instance_options)
   end
 
   it "can clone a base lxc container" do
     @instance.create
+    @logger_output.string.must_match(/creation of <test-ubuntu-1204> complete/i)
     @instance.destroy
+    @logger_output.string.must_match(/destruction of <test-ubuntu-1204> complete/i)
   end
 
 end

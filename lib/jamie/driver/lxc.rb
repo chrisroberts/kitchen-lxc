@@ -1,5 +1,4 @@
 require "securerandom"
-require "benchmark"
 require "jamie"
 
 module Jamie
@@ -16,13 +15,10 @@ module Jamie
 
       def create(state)
         state["container_id"] = instance.name + "-" + ::SecureRandom.hex(3)
-        elapsed_time = ::Benchmark.measure do
-          clone_container(state)
-          start_container(state)
-          state["hostname"] = container_ip(state)
-          wait_for_sshd(state["hostname"])
-        end
-        puts "       Created #{state["container_id"]} in #{elapsed_time.real} seconds."
+        clone_container(state)
+        start_container(state)
+        state["hostname"] = container_ip(state)
+        wait_for_sshd(state["hostname"])
       end
 
       def destroy(state)
