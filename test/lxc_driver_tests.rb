@@ -24,9 +24,9 @@ describe Jamie::Driver::Lxc do
 
   it "can clone a base lxc container" do
     @instance.create
-    @logger_output.string.must_match(/Finished creating <test-ubuntu-1204> complete/i)
+    @logger_output.string.must_match(/Finished creating <test-ubuntu-1204>/i)
     @instance.destroy
-    @logger_output.string.must_match(/Finished destroying of <test-ubuntu-1204> complete/i)
+    @logger_output.string.must_match(/Finished destroying <test-ubuntu-1204>/i)
   end
 
 end
