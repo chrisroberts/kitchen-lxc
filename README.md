@@ -18,6 +18,26 @@ Or install it yourself as:
 
 ## Usage
 
+### Configuration
+
+`.jamie.yml`
+
+```
+driver_plugin: lxc
+
+platforms:
+  - name: distribution
+    driver_config:
+      base_container: "distribution-release" # your base container name
+      username: "foo" # defaults to "jamie"
+      password: "bar" # defaults to "jamie"
+
+suites:
+  - name: default
+    run_list:
+      - "recipe[cookbook::recipe]"
+```
+
 ### Example
 
 ```
