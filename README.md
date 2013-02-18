@@ -1,12 +1,12 @@
-# Jamie LXC
+# Kitchen LXC
 
-The LXC driver for the Chef convergence integration test harness, [Jamie](https://github.com/jamie-ci/jamie).
+The LXC driver for the Chef convergence integration test harness, [Test Kitchen](https://github.com/opscode/test-kitchen/tree/1.0).
 
 ## Installation
 
 Add this line to your Chef cookbooks's Gemfile:
 
-    gem 'jamie-lxc'
+    gem 'kitchen-lxc'
 
 And then execute:
 
@@ -14,13 +14,13 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install jamie-lxc
+    $ gem install kitchen-lxc
 
 ## Usage
 
 ### Configuration
 
-`.jamie.yml`
+`.kitchen.local.yml`
 
 ```
 driver_plugin: lxc
@@ -29,8 +29,8 @@ platforms:
   - name: distribution
     driver_config:
       base_container: "distribution-release" # your base container name
-      username: "foo" # defaults to "jamie"
-      password: "bar" # defaults to "jamie"
+      username: "foo" # defaults to "kitchen"
+      password: "bar" # defaults to "kitchen"
 
 suites:
   - name: default
@@ -41,8 +41,8 @@ suites:
 ### Example
 
 ```
-$ jamie create
------> Starting Jamie
+$ kitchen create
+-----> Starting Kitchen
 -----> Creating <default-ubuntu>
        [lxc command] BEGIN (sudo lxc-clone -o ubuntu-1204 -n default-ubuntu-a5fb8a)
        Tweaking configuration
@@ -67,9 +67,9 @@ $ jamie create
        [lxc command] BEGIN (sudo lxc-wait -n default-centos-58fced -s RUNNING)
        [lxc command] END (0m1.05s)
        Finished creating <default-centos> (0m13.92s).
------> Jamie is finished. (0m21.45s)
-$ jamie destroy
------> Starting Jamie
+-----> Kitchen is finished. (0m21.45s)
+$ kitchen destroy
+-----> Starting Kitchen
 -----> Destroying <default-ubuntu>
        [lxc command] BEGIN (sudo lxc-destroy -n default-ubuntu-a5fb8a -f)
        [lxc command] END (0m1.18s)
@@ -78,7 +78,7 @@ $ jamie destroy
        [lxc command] BEGIN (sudo lxc-destroy -n default-centos-58fced -f)
        [lxc command] END (0m1.14s)
        Finished destroying <default-centos> (0m1.17s).
------> Jamie is finished. (0m2.45s)
+-----> Kitchen is finished. (0m2.45s)
 ```
 
 ## Contributing
