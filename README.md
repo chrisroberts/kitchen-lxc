@@ -4,13 +4,13 @@ The LXC driver for the Chef convergence integration test harness, [Test Kitchen]
 
 ## Installation
 
-Add this line to your Chef cookbooks's Gemfile:
+Add this line to your Chef cookbook's Gemfile:
 
     gem 'kitchen-lxc'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -23,20 +23,21 @@ Or install it yourself as:
 `.kitchen.local.yml`
 
 ```
+---
 driver_plugin: lxc
 
 platforms:
-  - name: distribution
-    driver_config:
-      base_container: "distribution-release" # your base container name
-      username: "foo" # defaults to "root"
-      password: "bar" # defaults to "root"
+- name: distribution-release
+  driver_config:
+    base_container: distribution-release # your base container name
+    username: foo # defaults to "root"
+    password: bar # defaults to "root"
 ```
 
 ### Example
 
 ```
-$ kitchen create
+$ bundle exec kitchen create
 -----> Starting Kitchen
 -----> Creating <default-ubuntu>
        [lxc command] BEGIN (sudo lxc-clone -o ubuntu-1204 -n default-ubuntu-a5fb8a)
@@ -63,7 +64,7 @@ $ kitchen create
        [lxc command] END (0m1.05s)
        Finished creating <default-centos> (0m13.92s).
 -----> Kitchen is finished. (0m21.45s)
-$ kitchen destroy
+$ bundle exec kitchen destroy
 -----> Starting Kitchen
 -----> Destroying <default-ubuntu>
        [lxc command] BEGIN (sudo lxc-destroy -n default-ubuntu-a5fb8a -f)
