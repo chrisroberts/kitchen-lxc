@@ -31,11 +31,6 @@ platforms:
       base_container: "distribution-release" # your base container name
       username: "foo" # defaults to "root"
       password: "bar" # defaults to "root"
-
-suites:
-  - name: default
-    run_list:
-      - "recipe[cookbook::recipe]"
 ```
 
 ### Example
