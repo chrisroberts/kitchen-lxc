@@ -1,4 +1,4 @@
-Copyright (c) 2012 Sean Porter
+Copyright (c) 2013 Sean Porter
 
 MIT License
 

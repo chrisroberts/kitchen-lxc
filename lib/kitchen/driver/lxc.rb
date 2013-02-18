@@ -1,17 +1,17 @@
 require "securerandom"
-require "jamie"
+require "kitchen"
 
-module Jamie
+module Kitchen
 
   module Driver
 
-    class Lxc < Jamie::Driver::SSHBase
+    class Lxc < Kitchen::Driver::SSHBase
 
       default_config :use_sudo,        true
       default_config :dhcp_lease_file, "/var/lib/misc/dnsmasq.leases"
       default_config :port,            "22"
-      default_config :username,        "jamie"
-      default_config :password,        "jamie"
+      default_config :username,        "kitchen"
+      default_config :password,        "kitchen"
 
       def create(state)
         state[:container_id] = instance.name + "-" + ::SecureRandom.hex(3)

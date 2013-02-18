@@ -1,15 +1,15 @@
 Gem::Specification.new do |gem|
-  gem.name          = "jamie-lxc"
+  gem.name          = "kitchen-lxc"
   gem.version       = "0.0.1.beta1"
   gem.authors       = ["Sean Porter"]
   gem.email         = ["portertech@gmail.com"]
-  gem.description   = "LXC driver for Jamie"
-  gem.summary       = "LXC driver for Jamie"
-  gem.homepage      = "https://github.com/portertech/jamie-lxc"
+  gem.description   = "LXC driver for Test Kitchen"
+  gem.summary       = "LXC driver for Test Kitchen"
+  gem.homepage      = "https://github.com/portertech/kitchen-lxc"
   gem.license       = "MIT"
   gem.has_rdoc      = false
 
-  gem.add_dependency("jamie", ">= 0.1.0.beta1")
+  gem.add_dependency("test-kitchen", ">= 1.0.0.alpha.0")
 
   gem.add_development_dependency("rake")
 

@@ -2,24 +2,24 @@ require "minitest/spec"
 require "minitest/autorun"
 require "stringio"
 
-require File.join(File.dirname(__FILE__), "..", "lib", "jamie", "driver", "lxc")
+require File.join(File.dirname(__FILE__), "..", "lib", "kitchen", "driver", "lxc")
 
-describe Jamie::Driver::Lxc do
+describe Kitchen::Driver::Lxc do
 
   before do
     @logger_output = StringIO.new
     driver_options = {
-      :jamie_root      => File.dirname(__FILE__),
+      :kitchen_root      => File.dirname(__FILE__),
       :base_container  => "ubuntu-1204"
     }
     instance_options = {
-      :logger    => Jamie::Logger.new(:stdout => @logger_output),
-      :suite     => Jamie::Suite.new(:name => "test", :run_list => Array.new),
-      :platform  => Jamie::Platform.new(:name => "ubuntu-1204"),
-      :driver    => Jamie::Driver::Lxc.new(driver_options),
-      :jr        => Jamie::Jr.new("test")
+      :logger    => Kitchen::Logger.new(:stdout => @logger_output),
+      :suite     => Kitchen::Suite.new(:name => "test", :run_list => Array.new),
+      :platform  => Kitchen::Platform.new(:name => "ubuntu-1204"),
+      :driver    => Kitchen::Driver::Lxc.new(driver_options),
+      :jr        => Kitchen::Jr.new("test")
     }
-    @instance = Jamie::Instance.new(instance_options)
+    @instance = Kitchen::Instance.new(instance_options)
   end
 
   it "can clone a base lxc container" do

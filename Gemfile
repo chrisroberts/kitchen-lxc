@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in jamie-lxc.gemspec
+# Specify your gem's dependencies in kitchen-lxc.gemspec
 gemspec
