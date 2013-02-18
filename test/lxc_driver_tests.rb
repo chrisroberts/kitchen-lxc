@@ -9,15 +9,14 @@ describe Kitchen::Driver::Lxc do
   before do
     @logger_output = StringIO.new
     driver_options = {
-      :kitchen_root      => File.dirname(__FILE__),
-      :base_container  => "ubuntu-1204"
+      :kitchen_root   => File.dirname(__FILE__),
+      :base_container => "ubuntu-1204"
     }
     instance_options = {
-      :logger    => Kitchen::Logger.new(:stdout => @logger_output),
-      :suite     => Kitchen::Suite.new(:name => "test", :run_list => Array.new),
-      :platform  => Kitchen::Platform.new(:name => "ubuntu-1204"),
-      :driver    => Kitchen::Driver::Lxc.new(driver_options),
-      :jr        => Kitchen::Jr.new("test")
+      :logger   => Kitchen::Logger.new(:stdout => @logger_output),
+      :suite    => Kitchen::Suite.new(:name => "test", :run_list => Array.new),
+      :platform => Kitchen::Platform.new(:name => "ubuntu-1204"),
+      :driver   => Kitchen::Driver::Lxc.new(driver_options)
     }
     @instance = Kitchen::Instance.new(instance_options)
   end

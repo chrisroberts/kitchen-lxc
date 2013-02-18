@@ -61,6 +61,8 @@ module Kitchen
 
     end
 
+    class LXC < Lxc; end
+
   end
 
 end
