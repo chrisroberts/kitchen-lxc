@@ -29,8 +29,8 @@ platforms:
   - name: distribution
     driver_config:
       base_container: "distribution-release" # your base container name
-      username: "foo" # defaults to "kitchen"
-      password: "bar" # defaults to "kitchen"
+      username: "foo" # defaults to "root"
+      password: "bar" # defaults to "root"
 
 suites:
   - name: default

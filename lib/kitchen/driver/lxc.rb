@@ -10,8 +10,8 @@ module Kitchen
       default_config :use_sudo,        true
       default_config :dhcp_lease_file, "/var/lib/misc/dnsmasq.leases"
       default_config :port,            "22"
-      default_config :username,        "kitchen"
-      default_config :password,        "kitchen"
+      default_config :username,        "root" # most LXC templates use this
+      default_config :password,        "root" # most LXC templates use this
 
       def create(state)
         state[:container_id] = instance.name + "-" + ::SecureRandom.hex(3)
