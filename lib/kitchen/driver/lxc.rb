@@ -7,6 +7,8 @@ module Kitchen
 
     class Lxc < Kitchen::Driver::SSHBase
 
+      no_parallel_for :create
+
       default_config :use_sudo,        true
       default_config :dhcp_lease_file, "/var/lib/misc/dnsmasq.leases"
       default_config :port,            "22"
