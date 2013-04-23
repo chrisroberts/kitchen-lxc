@@ -17,6 +17,7 @@ module Kitchen
 
       def create(state)
         state[:container_id] = instance.name + "-" + ::SecureRandom.hex(3)
+        state[:overlay] = @config[:overlay] if @config[:overlay]
         start_container(state)
         if @config[:ipaddress].nil?
           state[:hostname] = container_ip(state)
@@ -66,13 +67,16 @@ module Kitchen
             cmd << " --#{opt} #{@config[opt]} "
           end
         end
+        cmd << " -z #{state[:overlay]} " if state[:overlay]
         cmd << " 2>&1 > /dev/null"
         run_command(cmd)
         run_command("lxc-wait -n #{state[:container_id]} -s RUNNING")
       end
 
       def destroy_container(state)
-        run_command("lxc-stop -n #{state[:container_id]}")
+        cmd = "lxc-awesome-ephemeral -c -o #{config[:base_container]} -n #{state[:container_id]}"
+        cmd << " -z #{state[:overlay]} " if state[:overlay]
+        run_command(cmd)
       end
 
       def container_ip(state)
