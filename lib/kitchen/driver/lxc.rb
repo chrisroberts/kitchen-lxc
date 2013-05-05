@@ -20,9 +20,7 @@ module Kitchen
         state[:overlay] = @config[:overlay] if @config[:overlay]
         start_container(state)
         if @config[:ipaddress].nil?
-          state[:hostname] = container_ip(state)
-        else
-          state[:hostname] = state[:container_id]
+          state[:ipaddress] = container_ip(state)
         end
         wait_for_sshd(container_ip(state))
       end
@@ -62,7 +60,7 @@ module Kitchen
 
       def start_container(state)
         cmd = "lxc-awesome-ephemeral -d -o #{config[:base_container]} -n #{state[:container_id]}"
-        [ :ipaddress, :netmask, :gateway ].each do |opt|
+        [ :ipaddress, :netmask, :gateway, :key ].each do |opt|
           unless @config[opt].nil?
             cmd << " --#{opt} #{@config[opt]} "
           end
