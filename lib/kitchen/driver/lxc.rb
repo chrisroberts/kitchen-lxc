@@ -8,9 +8,9 @@ module Kitchen
     class Lxc < Kitchen::Driver::SSHBase
 
       no_parallel_for :create
-
+      
       default_config :use_sudo,        true
-      default_config :dhcp_lease_file, "/var/lib/misc/dnsmasq.leases"
+      default_config :dhcp_lease_file, Dir['/var/lib/misc/dnsmasq.*.leases'][0]
       default_config :port,            "22"
       default_config :username,        "root" # most LXC templates use this
       default_config :password,        "root" # most LXC templates use this
