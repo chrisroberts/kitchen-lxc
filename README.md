@@ -1,6 +1,10 @@
 # Kitchen LXC
 
-The LXC driver for the Chef convergence integration test harness, [Test Kitchen](https://github.com/opscode/test-kitchen/tree/1.0).
+The LXC driver for the Chef convergence integration test harness,
+[Test Kitchen](https://github.com/opscode/test-kitchen/tree/1.0).
+
+Kitchen LXC creates a clone of a "base" LXC container to run a test
+suite.
 
 ## Installation
 
@@ -14,20 +18,42 @@ And then execute:
 
 ## Usage
 
-The kitchen-lxc driver provides several configuration options
-
-* base_container: a base distribution that your platform will be a
-  clone of
-* username: username you will use to login to the container
-* password: password that you will use to login to the container
-* ipaddress: ipaddress for the container, currently only values in the
-  subnet 10.0.3.0/24 subnet are supported. If no ipaddress is
-  specified, dhcp will be used. 
-* overlay: directory to store the ephemeral container in, defaults to
-  /tmp. If you want to boot containers quickly, you want this
-  directory and the one containing it to be on a btrfs or lvm volume.
-
 ### Configuration
+
+#### base_container
+The base LXC container to be cloned for each Test Kitchen suite.
+
+#### username
+The username used to login to the container.
+
+Defaults to "root".
+
+#### password
+The password used to login to the container.
+
+Defaults to "root".
+
+#### dhcp_lease_file
+The DHCP lease file used to determine the container IP address.
+
+Defaults to the first match for "/var/lib/misc/dnsmasq*leases".
+
+#### ipaddress
+You may specify an IP address for the container, within the
+10.0.3.0/24 subnet, instead of using DHCP.
+
+#### port
+The SSH port used to login to the container.
+
+Defaults to 22.
+
+#### overlay
+The directory to store the container, best to be on BTRFS or an LVM
+volume, to utilize snapshots.
+
+Defaults to "/tmp".
+
+### Example
 
 `.kitchen.local.yml`
 
@@ -36,17 +62,12 @@ The kitchen-lxc driver provides several configuration options
 driver_plugin: lxc
 
 platforms:
-- name: distribution-release
+- name: ubuntu-1204
   driver_config:
-    base_container: distribution-release # your base container name
-    username: foo # defaults to "root"
-    password: bar # defaults to "root"
-    ipaddress: 10.0.3.100
-    overlay: /var/lib/lxc/overlay   # useful if you want to use a
-                                      btrfs or lvm volume
+    base_container: ubuntu-1204 # your base container name
+    username: kitchen # defaults to "root"
+    password: kitchen # defaults to "root"
 ```
-
-### Example
 
 ```
 $ bundle exec kitchen create
@@ -97,12 +118,9 @@ $ bundle exec kitchen destroy
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-
 ## Authors
 
-Author:: Sean Porter  
-Author:: Bryan W. Berry (<bryan.berry@gmail.com>)  
+Author:: Sean Porter (<portertech@gmail.com>)
+Author:: Bryan W. Berry (<bryan.berry@gmail.com>)
 
 See LICENSE.txt for licensing details
-
-
