@@ -14,6 +14,19 @@ And then execute:
 
 ## Usage
 
+The kitchen-lxc driver provides several configuration options
+
+* base_container: a base distribution that your platform will be a
+  clone of
+* username: username you will use to login to the container
+* password: password that you will use to login to the container
+* ipaddress: ipaddress for the container, currently only values in the
+  subnet 10.0.3.0/24 subnet are supported. If no ipaddress is
+  specified, dhcp will be used. 
+* overlay: directory to store the ephemeral container in, defaults to
+  /tmp. If you want to boot containers quickly, you want this
+  directory and the one containing it to be on a btrfs or lvm volume.
+
 ### Configuration
 
 `.kitchen.local.yml`
@@ -28,6 +41,9 @@ platforms:
     base_container: distribution-release # your base container name
     username: foo # defaults to "root"
     password: bar # defaults to "root"
+    ipaddress: 10.0.3.100
+    overlay: /var/lib/lxc/overlay   # useful if you want to use a
+                                      btrfs or lvm volume
 ```
 
 ### Example
@@ -80,3 +96,13 @@ $ bundle exec kitchen destroy
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+## Authors
+
+Author:: Sean Porter  
+Author:: Bryan W. Berry (<bryan.berry@gmail.com>)  
+
+See LICENSE.txt for licensing details
+
+
