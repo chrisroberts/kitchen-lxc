@@ -10,7 +10,7 @@ module Kitchen
       no_parallel_for :create
       
       default_config :use_sudo,        true
-      default_config :dhcp_lease_file, Dir['/var/lib/misc/dnsmasq.*.leases'][0]
+      default_config :dhcp_lease_file, '/var/lib/misc/dnsmasq.leases'
       default_config :port,            "22"
       default_config :username,        "root" # most LXC templates use this
       default_config :password,        "root" # most LXC templates use this
@@ -19,9 +19,6 @@ module Kitchen
         state[:container_id] = instance.name + "-" + ::SecureRandom.hex(3)
         state[:overlay] = @config[:overlay] if @config[:overlay]
         start_container(state)
-        if @config[:ipaddress].nil?
-          state[:ipaddress] = container_ip(state)
-        end
         wait_for_sshd(container_ip(state))
       end
 
@@ -39,7 +36,6 @@ module Kitchen
         args += %W{ -i #{combined[:ssh_key]}} if combined[:ssh_key]
         args += %W{ -p #{combined[:port]}} if combined[:port]
         args += %W{ #{combined[:username]}@#{state[:ipaddress]}}
-#        args += %W{ -p #{co}} if @combined[:password]
         Driver::LoginCommand.new(["ssh", *args])
       end
 
@@ -66,7 +62,6 @@ module Kitchen
           end
         end
         cmd << " -z #{state[:overlay]} " if state[:overlay]
-        cmd << " 2>&1 > /dev/null"
         run_command(cmd)
         run_command("lxc-wait -n #{state[:container_id]} -s RUNNING")
       end
@@ -77,32 +72,35 @@ module Kitchen
         run_command(cmd)
       end
 
+      # TODO: parse LXC.conf settings to find actual name of bridge interface
+      def find_dhcp_file(lease_file)
+        if ::File.exists?(lease_file)
+          return lease_file
+        else
+          lease_files = Dir['/var/lib/misc/dnsmasq.*.leases']
+          return lease_files[0] unless lease_files.empty?
+        end
+        raise ActionFailed, "LXC DHCP lease file does not exist '#{config[:dhcp_lease_file]}' and could not find alternate"
+      end
+
       def container_ip(state)
-        if !state[:ipaddress].nil?
-          return state[:ipaddress]
-        elsif !@config[:ipaddress].nil?
-          state[:ipaddress] = @config[:ipaddress]
-          return state[:ipaddress]
-        elsif ::File.exists?(config[:dhcp_lease_file])
+        if @config[:ipaddress]
+          return @config[:ipaddress]
+        else
+          dhcp_lease_file = find_dhcp_file(config[:dhcp_lease_file])
           30.times do
-            leases = ::File.readlines(config[:dhcp_lease_file]).map{ |line| line.split(" ") }
+            leases = ::File.readlines(dhcp_lease_file).map{ |line| line.split(" ") }
             leases.each do |lease|
-              if lease.include?(state[:container_id])
-                return lease[2]
-              end
+              return lease[2] if lease.include?(state[:container_id])
             end
             sleep 3
           end
-        else
-          raise ActionFailed, "LXC DHCP lease file does not exist '#{config[:dhcp_lease_file]}'"
         end
         raise ActionFailed, "Could not determine IP address for LXC container '#{state[:container_id]}'"
       end
-
     end
 
     class LXC < Lxc; end
 
   end
-
 end
