@@ -59,7 +59,7 @@ module Kitchen
           return config[:ipaddress]
         else
           30.times do
-            leases = ::File.readlines(dhcp_lease_file(config[:dhcp_lease_file])).map { |line| line.split(" ") }
+            leases = ::File.readlines(config[:dhcp_lease_file]).map { |line| line.split(" ") }
             leases.each do |lease|
               return lease[2] if lease.include?(state[:container_id])
             end
