@@ -47,11 +47,11 @@ module Kitchen
         run_command(cmd)
       end
 
-      def dhcp_lease_file(lease_file)
-        unless ::File.exists?(lease_file)
+      def dhcp_lease_file
+        unless ::File.exists?(config[:dhcp_lease_file])
           raise ActionFailed, "LXC DHCP lease file does not exist '#{config[:dhcp_lease_file]}'"
         end
-        lease_file
+        config[:dhcp_lease_file]
       end
 
       def container_ip(state)
