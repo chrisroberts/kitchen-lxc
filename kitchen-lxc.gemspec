@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name          = "kitchen-lxc"
-  gem.version       = "0.0.1.beta1"
+  gem.version       = "0.0.1.beta2"
   gem.authors       = ["Sean Porter"]
   gem.email         = ["portertech@gmail.com"]
   gem.description   = "LXC driver for Test Kitchen"
@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.license       = "MIT"
   gem.has_rdoc      = false
 
-  gem.add_dependency("test-kitchen", ">= 1.0.0.alpha.0")
+  gem.add_dependency("test-kitchen", ">= 1.0.0.alpha.6")
   gem.add_dependency("lxc-awesome-ephemeral", ">= 0.0.1.beta1")
 
   gem.add_development_dependency("rake")
