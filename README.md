@@ -117,6 +117,7 @@ $ bundle exec kitchen destroy
 ## Authors
 
 Author:: Sean Porter (<portertech@gmail.com>)
+
 Author:: Bryan W. Berry (<bryan.berry@gmail.com>)
 
 See LICENSE.txt for licensing details
