@@ -53,7 +53,7 @@ The directory to use for the rootfs overlay.
 Defaults to "/tmp".
 
 #### device
-The size of the block device for the rootfs overlay.
+The size (MB) of the block device for the rootfs overlay.
 
 ### Example
 
