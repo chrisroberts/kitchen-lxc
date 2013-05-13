@@ -48,10 +48,12 @@ The SSH port used to login to the container.
 Defaults to 22.
 
 #### overlay
-The directory to store the container, best to be on BTRFS or an LVM
-volume, to utilize snapshots.
+The directory to use for the rootfs overlay.
 
 Defaults to "/tmp".
+
+#### device
+The size of the block device for the rootfs overlay.
 
 ### Example
 

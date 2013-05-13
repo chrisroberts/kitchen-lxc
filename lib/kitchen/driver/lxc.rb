@@ -31,7 +31,7 @@ module Kitchen
 
       def start_container(state)
         cmd = "lxc-awesome-ephemeral -d -o #{config[:base_container]} -n #{state[:container_id]}"
-        [:size, :ipaddress, :netmask, :gateway, :key].each do |opt|
+        [:device, :ipaddress, :netmask, :gateway, :key].each do |opt|
           unless config[opt].nil?
             cmd << " --#{opt} #{config[opt]}"
           end
