@@ -9,7 +9,7 @@ module Kitchen
 
       no_parallel_for :create
 
-      default_config :use_sudo,        true
+      default_config :use_sudo,        false
       default_config :dhcp_lease_file, Dir["/var/lib/misc/dnsmasq*leases"][0]
       default_config :port,            "22"
       default_config :username,        "root" # most LXC templates use this
@@ -38,7 +38,6 @@ module Kitchen
         end
         cmd << " -z #{state[:overlay]}" if state[:overlay]
         run_command(cmd)
-        run_command("lxc-wait -n #{state[:container_id]} -s RUNNING")
       end
 
       def destroy_container(state)
