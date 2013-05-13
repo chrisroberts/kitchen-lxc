@@ -64,9 +64,9 @@ The size (MB) of the block device for the rootfs overlay.
 driver_plugin: lxc
 
 platforms:
-- name: ubuntu-1204
+- name: ubuntu_1204
   driver_config:
-    base_container: ubuntu-1204 # your base container name
+    base_container: ubuntu_1204 # your base container name
     username: kitchen # defaults to "root"
     password: kitchen # defaults to "root"
 ```
@@ -75,41 +75,35 @@ platforms:
 $ bundle exec kitchen create
 -----> Starting Kitchen
 -----> Creating <default-ubuntu>
-       [lxc command] BEGIN (sudo lxc-clone -o ubuntu-1204 -n default-ubuntu-a5fb8a)
-       Tweaking configuration
-       Copying rootfs...
-       Updating rootfs...
-       'default-ubuntu-a5fb8a' created
-       [lxc command] END (0m6.17s)
-       [lxc command] BEGIN (sudo lxc-start -n default-ubuntu-a5fb8a -d)
-       [lxc command] END (0m0.01s)
-       [lxc command] BEGIN (sudo lxc-wait -n default-ubuntu-a5fb8a -s RUNNING)
-       [lxc command] END (0m1.05s)
-       Finished creating <default-ubuntu> (0m7.42s).
------> Creating <default-centos>
-       [lxc command] BEGIN (sudo lxc-clone -o centos-6 -n default-centos-58fced)
-       Tweaking configuration
-       Copying rootfs...
-       Updating rootfs...
-       'default-centos-58fced' created
-       [lxc command] END (0m6.68s)
-       [lxc command] BEGIN (sudo lxc-start -n default-centos-58fced -d)
-       [lxc command] END (0m0.02s)
-       [lxc command] BEGIN (sudo lxc-wait -n default-centos-58fced -s RUNNING)
-       [lxc command] END (0m1.05s)
-       Finished creating <default-centos> (0m13.92s).
------> Kitchen is finished. (0m21.45s)
+       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -d -o tk-ubuntu-1204 -n default-ubuntu-a0c75e)
+       Setting up ephemeral container...
+       Starting up the container...
+       default-ubuntu-a0c75e is running
+       You connect with the command:
+           sudo lxc-console -n default-ubuntu-a0c75e
+       [kitchen::driver::lxc command] END (0m1.92s)
+       Finished creating <default-ubuntu> (0m4.98s).
+-----> Creating <stack-ubuntu>
+       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -d -o tk-ubuntu-1204 -n stack-ubuntu-cb87c2)
+       Setting up ephemeral container...
+       Starting up the container...
+       stack-ubuntu-cb87c2 is running
+       You connect with the command:
+           sudo lxc-console -n stack-ubuntu-cb87c2
+       [kitchen::driver::lxc command] END (0m1.91s)
+       Finished creating <stack-ubuntu> (0m4.99s).
+-----> Kitchen is finished. (0m9.99s)
 $ bundle exec kitchen destroy
 -----> Starting Kitchen
 -----> Destroying <default-ubuntu>
-       [lxc command] BEGIN (sudo lxc-destroy -n default-ubuntu-a5fb8a -f)
-       [lxc command] END (0m1.18s)
-       Finished destroying <default-ubuntu> (0m1.21s).
------> Destroying <default-centos>
-       [lxc command] BEGIN (sudo lxc-destroy -n default-centos-58fced -f)
-       [lxc command] END (0m1.14s)
-       Finished destroying <default-centos> (0m1.17s).
------> Kitchen is finished. (0m2.45s)
+       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -c -o tk-ubuntu-1204 -n default-ubuntu-a0c75e)
+       [kitchen::driver::lxc command] END (0m3.41s)
+       Finished destroying <default-ubuntu> (0m3.48s).
+-----> Destroying <stack-ubuntu>
+       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -c -o tk-ubuntu-1204 -n stack-ubuntu-cb87c2)
+       [kitchen::driver::lxc command] END (0m3.44s)
+       Finished destroying <stack-ubuntu> (0m3.52s).
+-----> Kitchen is finished. (0m7.03s)
 ```
 
 ## Contributing
