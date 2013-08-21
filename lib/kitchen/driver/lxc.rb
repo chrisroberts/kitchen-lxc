@@ -14,22 +14,42 @@ module Kitchen
       default_config :port,            "22"
       default_config :username,        "root" # most LXC templates use this
       default_config :password,        "root" # most LXC templates use this
+      default_config :use_ephemeral,   true
 
       def create(state)
         state[:container_id] = instance.name + "-" + ::SecureRandom.hex(3)
         state[:overlay] = config[:overlay] if config[:overlay]
-        start_container(state)
+        if config[:use_ephemeral]
+          start_ephemeral(state)
+        else
+          start_clone(state)
+        end
         state[:hostname] = container_ip(state)
         wait_for_sshd(state[:hostname])
       end
 
       def destroy(state)
-        destroy_container(state) if state[:container_id]
+        return unless state[:container_id]
+        if config[:use_ephemeral]
+          destroy_ephemeral(state)
+        else
+          destroy_clone(state)
+        end
       end
 
       protected
 
-      def start_container(state)
+      def start_clone(state)
+        run_command("lxc-clone -o #{config[:base_container]} -n #{state[:container_id]}")
+        run_command("lxc-start -n #{state[:container_id]} -d")
+        run_command("lxc-wait -n #{state[:container_id]} -s RUNNING")
+      end
+
+      def destroy_clone(state)
+        run_command("lxc-destroy -n #{state[:container_id]} -f")
+      end
+
+      def start_ephemeral(state)
         cmd = "lxc-awesome-ephemeral -d -o #{config[:base_container]} -n #{state[:container_id]}"
         [:device, :ipaddress, :netmask, :gateway, :key].each do |opt|
           unless config[opt].nil?
@@ -40,7 +60,7 @@ module Kitchen
         run_command(cmd)
       end
 
-      def destroy_container(state)
+      def destroy_ephemeral(state)
         cmd = "lxc-awesome-ephemeral -c -o #{config[:base_container]} -n #{state[:container_id]}"
         cmd << " -z #{state[:overlay]}" if state[:overlay]
         run_command(cmd)
