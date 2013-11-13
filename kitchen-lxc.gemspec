@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.has_rdoc      = false
 
   gem.add_dependency("test-kitchen", ">= 1.0.0.alpha.6")
-  gem.add_dependency("lxc-awesome-ephemeral", ">= 0.0.1.beta1")
+  gem.add_dependency("elecksee")
 
   gem.add_development_dependency("rake")
 
