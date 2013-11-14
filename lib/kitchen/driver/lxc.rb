@@ -14,13 +14,13 @@ module Kitchen
       default_config :password, "root" # most LXC templates use this
 
       default_config :original do |driver|
-        config[:base_container]
+        driver[:base_container]
       end
 
       no_parallel_for :create
 
       def create(state)
-        container = ::Lxc::Ephemeral.new(config)
+        container = ::Lxc::Ephemeral.new(config.to_hash)
         container.create!
 
         state[:container_name] = container.name

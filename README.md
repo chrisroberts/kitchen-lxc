@@ -1,10 +1,13 @@
 # Kitchen LXC
 
 The LXC driver for the Chef convergence integration test harness,
-[Test Kitchen](https://github.com/opscode/test-kitchen/tree/1.0).
+[Test Kitchen](https://github.com/test-kitchen).
 
-Kitchen LXC creates a clone of a "base" LXC container to run a test
-suite.
+Kitchen LXC creates an ephemeral clone of a "base" LXC container to
+run a test suite.
+
+You may want to use the
+[Docker driver](https://github.com/portertech/kitchen-docker).
 
 ## Installation
 
@@ -55,6 +58,19 @@ platforms:
 ```
 
 ```
+$ sudo kitchen create default
+-----> Starting Kitchen (v1.0.0.beta.4)
+-----> Creating <default-ubuntu_1204>
+       Finished creating <default-ubuntu_1204> (0m4.50s).
+-----> Kitchen is finished. (0m4.54s)
+$ sudo kitchen destroy default
+-----> Starting Kitchen (v1.0.0.beta.4)
+-----> Destroying <default-ubuntu_1204>
+       Finished destroying <default-ubuntu_1204> (0m0.32s).
+-----> Kitchen is finished. (0m0.35s)
+$ sudo kitchen list
+Instance        Driver  Provisioner  Last Action
+default-ubuntu_1204  Lxc     Chef Solo    <Not Created>
 ```
 
 ## Contributing
