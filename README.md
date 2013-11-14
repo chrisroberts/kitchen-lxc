@@ -1,10 +1,13 @@
 # Kitchen LXC
 
 The LXC driver for the Chef convergence integration test harness,
-[Test Kitchen](https://github.com/opscode/test-kitchen/tree/1.0).
+[Test Kitchen](https://github.com/test-kitchen).
 
-Kitchen LXC creates a clone of a "base" LXC container to run a test
-suite.
+Kitchen LXC creates an ephemeral clone of a "base" LXC container to
+run a test suite.
+
+You may want to use the
+[Docker driver](https://github.com/portertech/kitchen-docker).
 
 ## Installation
 
@@ -33,27 +36,10 @@ The password used to login to the container.
 
 Defaults to "root".
 
-#### dhcp_lease_file
-The DHCP lease file used to determine the container IP address.
-
-Defaults to the first match for "/var/lib/misc/dnsmasq*leases".
-
-#### ipaddress
-You may specify an IP address for the container, within the
-10.0.3.0/24 subnet, instead of using DHCP.
-
 #### port
 The SSH port used to login to the container.
 
 Defaults to 22.
-
-#### overlay
-The directory to use for the rootfs overlay.
-
-Defaults to "/tmp".
-
-#### device
-The size (MB) of the block device for the rootfs overlay.
 
 ### Example
 
@@ -72,38 +58,19 @@ platforms:
 ```
 
 ```
-$ bundle exec kitchen create
------> Starting Kitchen
------> Creating <default-ubuntu>
-       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -d -o tk-ubuntu-1204 -n default-ubuntu-a0c75e)
-       Setting up ephemeral container...
-       Starting up the container...
-       default-ubuntu-a0c75e is running
-       You connect with the command:
-           sudo lxc-console -n default-ubuntu-a0c75e
-       [kitchen::driver::lxc command] END (0m1.92s)
-       Finished creating <default-ubuntu> (0m4.98s).
------> Creating <stack-ubuntu>
-       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -d -o tk-ubuntu-1204 -n stack-ubuntu-cb87c2)
-       Setting up ephemeral container...
-       Starting up the container...
-       stack-ubuntu-cb87c2 is running
-       You connect with the command:
-           sudo lxc-console -n stack-ubuntu-cb87c2
-       [kitchen::driver::lxc command] END (0m1.91s)
-       Finished creating <stack-ubuntu> (0m4.99s).
------> Kitchen is finished. (0m9.99s)
-$ bundle exec kitchen destroy
------> Starting Kitchen
------> Destroying <default-ubuntu>
-       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -c -o tk-ubuntu-1204 -n default-ubuntu-a0c75e)
-       [kitchen::driver::lxc command] END (0m3.41s)
-       Finished destroying <default-ubuntu> (0m3.48s).
------> Destroying <stack-ubuntu>
-       [kitchen::driver::lxc command] BEGIN (lxc-awesome-ephemeral -c -o tk-ubuntu-1204 -n stack-ubuntu-cb87c2)
-       [kitchen::driver::lxc command] END (0m3.44s)
-       Finished destroying <stack-ubuntu> (0m3.52s).
------> Kitchen is finished. (0m7.03s)
+$ sudo kitchen create default
+-----> Starting Kitchen (v1.0.0.beta.4)
+-----> Creating <default-ubuntu_1204>
+       Finished creating <default-ubuntu_1204> (0m4.50s).
+-----> Kitchen is finished. (0m4.54s)
+$ sudo kitchen destroy default
+-----> Starting Kitchen (v1.0.0.beta.4)
+-----> Destroying <default-ubuntu_1204>
+       Finished destroying <default-ubuntu_1204> (0m0.32s).
+-----> Kitchen is finished. (0m0.35s)
+$ sudo kitchen list
+Instance        Driver  Provisioner  Last Action
+default-ubuntu_1204  Lxc     Chef Solo    <Not Created>
 ```
 
 ## Contributing
@@ -113,11 +80,5 @@ $ bundle exec kitchen destroy
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-## Authors
-
-Author:: Sean Porter (<portertech@gmail.com>)
-
-Author:: Bryan W. Berry (<bryan.berry@gmail.com>)
 
 See LICENSE.txt for licensing details
