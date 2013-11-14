@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name          = "kitchen-lxc"
-  gem.version       = "0.0.1.beta2"
+  gem.version       = "0.0.1"
   gem.authors       = ["Sean Porter"]
   gem.email         = ["portertech@gmail.com"]
   gem.description   = "LXC driver for Test Kitchen"
