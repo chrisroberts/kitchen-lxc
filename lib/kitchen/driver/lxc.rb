@@ -13,6 +13,10 @@ module Kitchen
       default_config :username, "root" # most LXC templates use this
       default_config :password, "root" # most LXC templates use this
 
+      default_config :original do |driver|
+        config[:base_container]
+      end
+
       no_parallel_for :create
 
       def create(state)
@@ -31,8 +35,6 @@ module Kitchen
       def destroy(state)
         if state[:container_name]
           lxc = ::Lxc.new(state[:container_name])
-          lxc.stop
-          lxc.wait_for_state(:stopped)
           lxc.destroy
         end
       end
