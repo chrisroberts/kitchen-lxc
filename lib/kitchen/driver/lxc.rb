@@ -1,6 +1,8 @@
 require "kitchen"
 require "elecksee/ephemeral"
 
+::Lxc.use_sudo = true
+
 module Kitchen
 
   module Driver
@@ -14,17 +16,25 @@ module Kitchen
       no_parallel_for :create
 
       def create(state)
-        state[:container] = ::Lxc::Ephemeral.new(config)
-        state[:container].create!
-        lxc = ::Lxc.new(state[:container].name)
+        container = ::Lxc::Ephemeral.new(config)
+        container.create!
+
+        state[:container_name] = container.name
+
+        lxc = ::Lxc.new(state[:container_name])
         lxc.start
-        lxc.wait_for_state(:running)
+
         state[:hostname] = lxc.container_ip(10, true)
         wait_for_sshd(state[:hostname])
       end
 
       def destroy(state)
-        state[:container].cleanup if state[:container]
+        if state[:container_name]
+          lxc = ::Lxc.new(state[:container_name])
+          lxc.stop
+          lxc.wait_for_state(:stopped)
+          lxc.destroy
+        end
       end
 
     end
