@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.license       = "MIT"
   gem.has_rdoc      = false
 
-  gem.add_dependency("test-kitchen", ">= 1.0.0.beta.4")
-  gem.add_dependency("elecksee", ">= 1.0.14")
+  gem.add_dependency("test-kitchen", '~> 1.2', '>= 1.2.1')
+  gem.add_dependency("elecksee", '~> 1.0', '>= 1.0.22')
 
   gem.add_development_dependency("rake")
 
