@@ -3,10 +3,9 @@
 The LXC driver for the Chef convergence integration test harness,
 [Test Kitchen](https://github.com/test-kitchen).
 
-Kitchen LXC creates an ephemeral clone of a "base" LXC container to
-run a test suite.
+Kitchen LXC uses ephemeral containers to run a test suite.
 
-You may want to use the
+You may want to use this instead of the
 [Docker driver](https://github.com/portertech/kitchen-docker).
 
 ## Installation
@@ -23,8 +22,8 @@ And then execute:
 
 ### Configuration
 
-#### base_container
-The base LXC container to be cloned for each Test Kitchen suite.
+#### lxc_directory
+The base LXC container directory on the host.
 
 #### username
 The username used to login to the container.
@@ -41,6 +40,29 @@ The SSH port used to login to the container.
 
 Defaults to 22.
 
+### System layout
+
+This driver will map the platform name to a container name
+with the defined lxc directory. The name is munged with a
+simple gsub regex:
+
+```ruby
+name.gsub(/[_\-.]/, '')
+```
+
+and it will then look for container names that start with
+the updated platform name. So, if the platform name is
+'ubuntu', and the host system has 'ubuntu_1204' and 'ubuntu_1404',
+the container used will be 'ubuntu_1204'
+
+### System setup
+
+An easy way to setup the host machine is to use the `vagabond` cookbook.
+It will provide you with a collection of platforms including ubuntu,
+centos, and debian. Just copy the `/opt/hw-lxc-config/id_rsa` to the
+user's default key. This will remove the need to futz with user/pass
+configuration.
+
 ### Example
 
 `.kitchen.local.yml`
@@ -50,9 +72,8 @@ Defaults to 22.
 driver_plugin: lxc
 
 platforms:
-- name: ubuntu_1204
+- name: ubuntu
   driver_config:
-    base_container: ubuntu_1204 # your base container name
     username: kitchen # defaults to "root"
     password: kitchen # defaults to "root"
 ```
