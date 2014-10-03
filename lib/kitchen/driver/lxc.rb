@@ -13,19 +13,18 @@ module Kitchen
       default_config :username, "root" # most LXC templates use this
       default_config :password, "root" # most LXC templates use this
 
-      default_config :original do |driver|
+
+      no_parallel_for :create
+
+      def create(state)
         name = instance.name.gsub(/[_\-.]/, '')
         names = Dir.glob(driver.fetch(:lxc_directory, '/var/lib/lxc/*')).map do |path|
           if(File.directory?(path))
             File.basename(path)
           end
         end.compact.sort
-        names.detect{|n| name.start_with?(n)}
-      end
+        config[:original] = names.detect{|n| name.start_with?(n)}
 
-      no_parallel_for :create
-
-      def create(state)
         container = ::Lxc::Ephemeral.new(config.to_hash)
         container.create!
 
