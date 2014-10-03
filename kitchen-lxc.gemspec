@@ -1,11 +1,11 @@
 Gem::Specification.new do |gem|
   gem.name          = "kitchen-lxc"
   gem.version       = "0.0.1"
-  gem.authors       = ["Sean Porter"]
-  gem.email         = ["portertech@gmail.com"]
+  gem.authors       = ["Sean Porter", "Chris Roberts"]
+  gem.email         = ["portertech@gmail.com", "code@chrisroberts.org"]
   gem.description   = "LXC driver for Test Kitchen"
   gem.summary       = "LXC driver for Test Kitchen"
-  gem.homepage      = "https://github.com/portertech/kitchen-lxc"
+  gem.homepage      = "https://github.com/chrisroberts/kitchen-lxc"
   gem.license       = "MIT"
   gem.has_rdoc      = false
 
