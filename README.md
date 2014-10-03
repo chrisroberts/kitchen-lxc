@@ -94,6 +94,10 @@ Instance        Driver  Provisioner  Last Action
 default-ubuntu_1204  Lxc     Chef Solo    <Not Created>
 ```
 
+## Note
+
+Tests are failing right now. They'll be fixed soon!
+
 ## Contributing
 
 1. Fork it
