@@ -14,7 +14,13 @@ module Kitchen
       default_config :password, "root" # most LXC templates use this
 
       default_config :original do |driver|
-        driver[:base_container]
+        name = instance.name.gsub([\-_.], '')
+        names = Dir.glob(driver.fetch(:lxc_directory, '/var/lib/lxc/*')).map do |path|
+          if(File.directory?(path))
+            File.basename(path)
+          end
+        end.compact.sort
+        names.detect{|n| name.start_with?(n)}
       end
 
       no_parallel_for :create
@@ -35,7 +41,7 @@ module Kitchen
       def destroy(state)
         if state[:container_name]
           lxc = ::Lxc.new(state[:container_name])
-          lxc.destroy
+          lxc.stop
         end
       end
 
